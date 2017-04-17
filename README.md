@@ -1,9 +1,11 @@
 # api documentation for  [express-http-proxy (v0.11.0)](https://github.com/villadora/express-http-proxy#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-express-http-proxy.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-express-http-proxy) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-express-http-proxy.svg)](https://travis-ci.org/npmdoc/node-npmdoc-express-http-proxy)
 #### http proxy middleware for express
 
-[![NPM](https://nodei.co/npm/express-http-proxy.png?downloads=true)](https://www.npmjs.com/package/express-http-proxy)
+[![NPM](https://nodei.co/npm/express-http-proxy.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/express-http-proxy)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-express-http-proxy/build/screenCapture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-express-http-proxy_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-express-http-proxy/build/apidoc.html)
+- [https://npmdoc.github.io/node-npmdoc-express-http-proxy/build/apidoc.html](https://npmdoc.github.io/node-npmdoc-express-http-proxy/build/apidoc.html)
+
+[![apidoc](https://npmdoc.github.io/node-npmdoc-express-http-proxy/build/screenCapture.buildCi.browser.%252Ftmp%252Fbuild%252Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-express-http-proxy/build/apidoc.html)
 
 ![npmPackageListing](https://npmdoc.github.io/node-npmdoc-express-http-proxy/build/screenCapture.npmPackageListing.svg)
 
@@ -17,8 +19,7 @@
 
 {
     "author": {
-        "name": "villadora",
-        "email": "jky239@gmail.com"
+        "name": "villadora"
     },
     "bugs": {
         "url": "https://github.com/villadora/express-http-proxy/issues"
@@ -36,12 +37,10 @@
             "url": "https://github.com/razzmatazz"
         },
         {
-            "name": "Jérémy Lal",
-            "email": "kapouer@melix.org"
+            "name": "Jérémy Lal"
         },
         {
-            "name": "Wei Gao",
-            "email": "jky239@gmail.com"
+            "name": "Wei Gao"
         },
         {
             "name": "Nik Krimm",
@@ -79,21 +78,17 @@
     "main": "index.js",
     "maintainers": [
         {
-            "name": "gstroup",
-            "email": "gstroup@gmail.com"
+            "name": "gstroup"
         },
         {
-            "name": "monkpow",
-            "email": "nkrimm@gmail.com"
+            "name": "monkpow"
         },
         {
-            "name": "villadora",
-            "email": "jky239@gmail.com"
+            "name": "villadora"
         }
     ],
     "name": "express-http-proxy",
     "optionalDependencies": {},
-    "readme": "ERROR: No README data found!",
     "repository": {
         "type": "git",
         "url": "git://github.com/villadora/express-http-proxy.git"
@@ -108,16 +103,6 @@
     "version": "0.11.0"
 }
 ```
-
-
-
-# <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
-
-#### [module express-http-proxy](#apidoc.module.express-http-proxy)
-
-
-
-# <a name="apidoc.module.express-http-proxy"></a>[module express-http-proxy](#apidoc.module.express-http-proxy)
 
 
 
