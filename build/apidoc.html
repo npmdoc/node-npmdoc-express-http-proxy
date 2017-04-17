@@ -61,12 +61,253 @@
 
     <li class="apidocModuleLi"><a href="#apidoc.module.express-http-proxy">module express-http-proxy</a><ol>
 
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.express-http-proxy.express-http-proxy">
+            function <span class="apidocSignatureSpan"></span>express-http-proxy
+            <span class="apidocSignatureSpan">(host, options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.express-http-proxy.toString">
+            function <span class="apidocSignatureSpan">express-http-proxy.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.express-http-proxy.toString">module express-http-proxy.toString</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.express-http-proxy.toString.toString">
+            function <span class="apidocSignatureSpan">express-http-proxy.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
     </ol></li>
 
 </ol></div>
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.express-http-proxy" id="apidoc.module.express-http-proxy">module express-http-proxy</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.express-http-proxy.express-http-proxy" id="apidoc.element.express-http-proxy.express-http-proxy">
+        function <span class="apidocSignatureSpan"></span>express-http-proxy
+        <span class="apidocSignatureSpan">(host, options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function proxy(host, options) {
+  assert(host, &#x27;Host should not be empty&#x27;);
+
+  options = options || {};
+
+  var parsedHost;
+
+<span class="apidocCodeCommentSpan">  /**
+   * Function :: intercept(targetResponse, data, res, req, function(err, json, sent));
+   */
+</span>  var intercept = options.intercept;
+  var decorateRequest = options.decorateRequest;
+  var forwardPath = options.forwardPath || defaultForwardPath;
+  var resolveProxyPathAsync = options.forwardPathAsync || defaultForwardPathAsync(forwardPath);
+  var filter = options.filter || defaultFilter;
+  var limit = options.limit || &#x27;1mb&#x27;;
+  var preserveReqSession = options.preserveReqSession;
+  var memoizeHost = unset(options.memoizeHost) ? true : options.memoizeHost;
+
+  return function handleProxy(req, res, next) {
+    if (!filter(req, res)) { return next(); }
+    var resolvePath = resolveProxyPathAsync(req, res);
+    var parseBody = maybeParseBody(req, limit);
+    var prepareRequest = Promise.all([resolvePath, parseBody]);
+    prepareRequest.then(function(results) {
+      var path = results[0];
+      var bodyContent = results[1];
+      sendProxyRequest(req, res, next, path, bodyContent);
+    });
+  };
+
+  function sendProxyRequest(req, res, next, path, bodyContent) {
+    parsedHost = (memoizeHost &#x26;&#x26; parsedHost) ? parsedHost : parseHost(host, req, options);
+
+    var reqOpt = {
+      hostname: parsedHost.host,
+      port: options.port || parsedHost.port,
+      headers: reqHeaders(req, options),
+      method: req.method,
+      path: path,
+      bodyContent: bodyContent,
+      params: req.params,
+    };
+
+    if (preserveReqSession) {
+      reqOpt.session = req.session;
+    }
+
+    if (decorateRequest) {
+      reqOpt = decorateRequest(reqOpt, req) || reqOpt;
+    }
+
+    bodyContent = reqOpt.bodyContent;
+    delete reqOpt.bodyContent;
+    delete reqOpt.params;
+
+    bodyContent = options.reqAsBuffer ?
+      asBuffer(bodyContent, options) :
+      asBufferOrString(bodyContent);
+
+    reqOpt.headers[&#x27;content-length&#x27;] = getContentLength(bodyContent);
+
+    if (bodyEncoding(options)) {
+      reqOpt.headers[&#x27;Accept-Charset&#x27;] = bodyEncoding(options);
+    }
+
+
+    function postIntercept(res, next, rspData) {
+      return function(err, rspd, sent) {
+        if (err) {
+          return next(err);
+        }
+        rspd = asBuffer(rspd, options);
+        rspd = maybeZipResponse(rspd, res);
+
+        if (!Buffer.isBuffer(rspd)) {
+          next(new Error(&#x27;intercept should return string or&#x27; +
+                &#x27;buffer as data&#x27;));
+        }
+
+        if (!res.headersSent) {
+          res.set(&#x27;content-length&#x27;, rspd.length);
+        } else if (rspd.length !== rspData.length) {
+          var error = &#x27;&#x22;Content-Length&#x22; is already sent,&#x27; +
+                &#x27;the length of response data can not be changed&#x27;;
+          next(new Error(error));
+        }
+
+        if (!sent) {
+          res.send(rspd);
+        }
+      };
+    }
+
+    var proxyTargetRequest = parsedHost.module.request(reqOpt, function(rsp) {
+      var chunks = [];
+
+      rsp.on(&#x27;data&#x27;, function(chunk) {
+        chunks.push(chunk);
+      });
+
+      rsp.on(&#x27;end&#x27;, function() {
+
+        var rspData = Buffer.concat(chunks, chunkLength(chunks));
+
+        if (intercept) {
+          rspData = maybeUnzipResponse(rspData, res);
+          var callback = postIntercept(res, next, rspData);
+          intercept(rsp, rspData, req, res, callback);
+        } else {
+          // see issue https://github.com/villadora/express-http-proxy/issues/104
+          // Not sure how to automate tests on this line, so be careful when changing.
+          if (!res.headersSent) {
+            res.send(rspData);
+          }
+        }
+      });
+
+      rsp.on(&#x27;error&#x27;, function(err) {
+        next(err);
+      });
+
+      if (!res.headersSent) {
+        res.status(rsp.statusCode);
+        Object.keys(rsp.headers)
+          .filter(function(item) { return item !== &#x27;transfer-encoding&#x27;; })
+          .forEach(function(item) {
+            res.set(item, rsp.headers[item]);
+          });
+      }
+    });
+
+    proxyTargetRequest.on(&#x27;socket&#x27;, function(socket) {
+      if (options.timeout) {
+        socket.setTimeout(options.timeout, function( ...</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.express-http-proxy.toString" id="apidoc.element.express-http-proxy.toString">
+        function <span class="apidocSignatureSpan">express-http-proxy.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return text;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+You can intercept the response before sending it back to the client.
+
+```js
+app.use(&#x27;/proxy&#x27;, proxy(&#x27;www.google.com&#x27;, {
+  intercept: function(rsp, data, req, res, callback) {
+    // rsp - original response from the target
+    data = JSON.parse(data.<span class="apidocCodeKeywordSpan">toString</span>(&#x27;utf8&#x27;));
+    callback(null, JSON.stringify(data));
+  }
+}));
+```
+
+#### limit
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.express-http-proxy.toString" id="apidoc.module.express-http-proxy.toString">module express-http-proxy.toString</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.express-http-proxy.toString.toString" id="apidoc.element.express-http-proxy.toString.toString">
+        function <span class="apidocSignatureSpan">express-http-proxy.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+You can intercept the response before sending it back to the client.
+
+```js
+app.use(&#x27;/proxy&#x27;, proxy(&#x27;www.google.com&#x27;, {
+  intercept: function(rsp, data, req, res, callback) {
+    // rsp - original response from the target
+    data = JSON.parse(data.<span class="apidocCodeKeywordSpan">toString</span>(&#x27;utf8&#x27;));
+    callback(null, JSON.stringify(data));
+  }
+}));
+```
+
+#### limit
+...</pre></li>
+    </ul>
+
 
 </div>
 
