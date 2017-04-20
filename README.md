@@ -1,4 +1,7 @@
-# api documentation for  [express-http-proxy (v0.11.0)](https://github.com/villadora/express-http-proxy#readme)  [![npm package](https://img.shields.io/npm/v/npmdoc-express-http-proxy.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-express-http-proxy) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-express-http-proxy.svg)](https://travis-ci.org/npmdoc/node-npmdoc-express-http-proxy)
+# npmdoc-express-http-proxy
+
+#### api documentation for  express-http-proxy (v0.11.0)  [![npm package](https://img.shields.io/npm/v/npmdoc-express-http-proxy.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-express-http-proxy) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-express-http-proxy.svg)](https://travis-ci.org/npmdoc/node-npmdoc-express-http-proxy)
+
 #### http proxy middleware for express
 
 [![NPM](https://nodei.co/npm/express-http-proxy.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/express-http-proxy)
@@ -18,11 +21,46 @@
 ```json
 
 {
+    "name": "express-http-proxy",
+    "version": "0.11.0",
+    "description": "http proxy middleware for express",
+    "engines": {
+        "node": ">=4.0.0"
+    },
+    "engineStrict": true,
+    "main": "index.js",
+    "scripts": {
+        "test": "npm -s run mocha && npm run -s lint && npm run -s jscs",
+        "test:debug": "mocha debug -R spec test/*.js",
+        "mocha": "mocha -R spec test/*.js",
+        "lint": "jshint index.js test/*.js",
+        "jscs": "jscs index.js test/*.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/villadora/express-http-proxy.git"
+    },
+    "keywords": [
+        "express-http-proxy"
+    ],
     "author": {
         "name": "villadora"
     },
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/villadora/express-http-proxy/issues"
+    },
+    "devDependencies": {
+        "body-parser": "^1.15.2",
+        "express": "^4.3.1",
+        "jscs": "^3.0.7",
+        "jshint": "^2.5.5",
+        "mocha": "^2.1.0",
+        "supertest": "^1.2.0"
+    },
+    "dependencies": {
+        "es6-promise": "^3.2.1",
+        "raw-body": "^2.1.7"
     },
     "contributors": [
         {
@@ -46,61 +84,7 @@
             "name": "Nik Krimm",
             "url": "https://github.com/monkpow"
         }
-    ],
-    "dependencies": {
-        "es6-promise": "^3.2.1",
-        "raw-body": "^2.1.7"
-    },
-    "description": "http proxy middleware for express",
-    "devDependencies": {
-        "body-parser": "^1.15.2",
-        "express": "^4.3.1",
-        "jscs": "^3.0.7",
-        "jshint": "^2.5.5",
-        "mocha": "^2.1.0",
-        "supertest": "^1.2.0"
-    },
-    "directories": {},
-    "dist": {
-        "shasum": "f2e6ba2e9e8677b1ba335375c3cae670d5a1bb0a",
-        "tarball": "https://registry.npmjs.org/express-http-proxy/-/express-http-proxy-0.11.0.tgz"
-    },
-    "engineStrict": true,
-    "engines": {
-        "node": ">=4.0.0"
-    },
-    "gitHead": "c0c8dbd54a6bbef8b773a69c30c0bb69d9e9d536",
-    "homepage": "https://github.com/villadora/express-http-proxy#readme",
-    "keywords": [
-        "express-http-proxy"
-    ],
-    "license": "MIT",
-    "main": "index.js",
-    "maintainers": [
-        {
-            "name": "gstroup"
-        },
-        {
-            "name": "monkpow"
-        },
-        {
-            "name": "villadora"
-        }
-    ],
-    "name": "express-http-proxy",
-    "optionalDependencies": {},
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/villadora/express-http-proxy.git"
-    },
-    "scripts": {
-        "jscs": "jscs index.js test/*.js",
-        "lint": "jshint index.js test/*.js",
-        "mocha": "mocha -R spec test/*.js",
-        "test": "npm -s run mocha && npm run -s lint && npm run -s jscs",
-        "test:debug": "mocha debug -R spec test/*.js"
-    },
-    "version": "0.11.0"
+    ]
 }
 ```
 
