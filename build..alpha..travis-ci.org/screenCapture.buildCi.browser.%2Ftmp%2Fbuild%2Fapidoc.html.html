@@ -47,7 +47,7 @@
 }
 </style>
 <h1>api documentation for
-    <a href="https://github.com/villadora/express-http-proxy#readme">express-http-proxy (v0.11.0)</a>
+    <a>express-http-proxy (v0.11.0)</a>
 </h1>
 <h4>http proxy middleware for express</h4>
 <div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
@@ -59,28 +59,6 @@
             <a class="apidocElementLiA" href="#apidoc.element.express-http-proxy.express-http-proxy">
             function <span class="apidocSignatureSpan"></span>express-http-proxy
             <span class="apidocSignatureSpan">(host, options)</span>
-            </a>
-
-        </li>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.express-http-proxy.toString">
-            function <span class="apidocSignatureSpan">express-http-proxy.</span>toString
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.express-http-proxy.toString">module express-http-proxy.toString</a><ol>
-
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.express-http-proxy.toString.toString">
-            function <span class="apidocSignatureSpan">express-http-proxy.</span>toString
-            <span class="apidocSignatureSpan">()</span>
             </a>
 
         </li>
@@ -236,69 +214,6 @@
       if (options.timeout) {
         socket.setTimeout(options.timeout, function( ...</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
-
-
-
-    <h2>
-        <a href="#apidoc.element.express-http-proxy.toString" id="apidoc.element.express-http-proxy.toString">
-        function <span class="apidocSignatureSpan">express-http-proxy.</span>toString
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">toString = function () {
-    return text;
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-
-You can intercept the response before sending it back to the client.
-
-```js
-app.use('/proxy', proxy('www.google.com', {
-  intercept: function(rsp, data, req, res, callback) {
-    // rsp - original response from the target
-    data = JSON.parse(data.<span class="apidocCodeKeywordSpan">toString</span>('utf8'));
-    callback(null, JSON.stringify(data));
-  }
-}));
-```
-
-#### limit
-...</pre></li>
-    </ul>
-
-
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.express-http-proxy.toString" id="apidoc.module.express-http-proxy.toString">module express-http-proxy.toString</a></h1>
-
-
-    <h2>
-        <a href="#apidoc.element.express-http-proxy.toString.toString" id="apidoc.element.express-http-proxy.toString.toString">
-        function <span class="apidocSignatureSpan">express-http-proxy.</span>toString
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">function toString() { [native code] }</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-
-You can intercept the response before sending it back to the client.
-
-```js
-app.use('/proxy', proxy('www.google.com', {
-  intercept: function(rsp, data, req, res, callback) {
-    // rsp - original response from the target
-    data = JSON.parse(data.<span class="apidocCodeKeywordSpan">toString</span>('utf8'));
-    callback(null, JSON.stringify(data));
-  }
-}));
-```
-
-#### limit
-...</pre></li>
     </ul>
 
 
